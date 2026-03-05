@@ -32,7 +32,8 @@
       Activity, HeartPulse, ArrowRight, ChevronRight, Info, 
       Target, Flame, Play, Edit3, Award, Utensils, BookOpen, 
       ArrowLeft, Ticket, LayoutGrid, CheckCircle2, RefreshCw, 
-      Facebook, Instagram, MessageCircle, ExternalLink, Youtube, ChevronDown, ChevronUp
+      Facebook, Instagram, MessageCircle, ExternalLink, Youtube, 
+      ChevronDown, ChevronUp, MessageSquarePlus, X
     } from 'lucide-react';
 
     function App() {
@@ -50,8 +51,8 @@
       });
 
       const [dashboardView, setDashboardView] = useState('menu');
-      // 控制參考資料列表是否展開
       const [showResources, setShowResources] = useState(false);
+      const [showFeedback, setShowFeedback] = useState(false); // 控制回饋小視窗的狀態
 
       const [bentoState, setBentoState] = useState({
         aerobic: '',
@@ -560,7 +561,6 @@
                 </a>
               </div>
               
-              {/* 實用運動指南與工具 - 摺疊按鈕設計 */}
               <div className="mt-8 px-2">
                 <button 
                   onClick={() => setShowResources(!showResources)}
@@ -932,6 +932,39 @@
               </a>
             </p>
           </footer>
+
+          {/* 浮動意見回饋按鈕 */}
+          <div className="fixed bottom-6 right-6 z-50">
+            {showFeedback && (
+              <div className="absolute bottom-16 right-0 mb-4 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 p-5 animate-in slide-in-from-bottom-2">
+                <div className="flex justify-between items-center mb-2">
+                  <h4 className="font-bold text-gray-800">有什麼建議嗎？</h4>
+                  <button onClick={() => setShowFeedback(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <p className="text-sm text-gray-500 mb-5 leading-relaxed">發現錯誤、想許願新功能，或是單純想分享使用心得，都歡迎跟我說！</p>
+                <div>
+                  <a 
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSfQCwqwNpqwfNVca6ToQMZzgSJ7Y98-RDHzsGDLmnvktV81Iw/viewform?usp=publish-editor" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="block w-full text-center py-3 bg-blue-50 text-blue-700 rounded-xl text-sm font-bold hover:bg-blue-100 transition-colors"
+                  >
+                    📝 填寫回饋表單
+                  </a>
+                </div>
+              </div>
+            )}
+            <button 
+              onClick={() => setShowFeedback(!showFeedback)} 
+              className="bg-blue-600 text-white py-3 px-5 rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-105 flex items-center justify-center gap-2 group"
+              title="意見回饋"
+            >
+              <MessageSquarePlus className="w-5 h-5" />
+              <span className="font-medium tracking-wide">意見回饋</span>
+            </button>
+          </div>
         </div>
       );
     }
