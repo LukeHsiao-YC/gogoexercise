@@ -32,7 +32,7 @@
       Activity, HeartPulse, ArrowRight, ChevronRight, Info, 
       Target, Flame, Play, Edit3, Award, Utensils, BookOpen, 
       ArrowLeft, Ticket, LayoutGrid, CheckCircle2, RefreshCw, 
-      Facebook, Instagram, MessageCircle, ExternalLink 
+      Facebook, Instagram, MessageCircle, ExternalLink, Youtube, ChevronDown, ChevronUp
     } from 'lucide-react';
 
     function App() {
@@ -50,6 +50,8 @@
       });
 
       const [dashboardView, setDashboardView] = useState('menu');
+      // 控制參考資料列表是否展開
+      const [showResources, setShowResources] = useState(false);
 
       const [bentoState, setBentoState] = useState({
         aerobic: '',
@@ -120,6 +122,7 @@
         setResult({ bmi: bmi.toFixed(1), type, title, description, fitness: formData.fitness });
         setStep('result');
         setDashboardView('menu');
+        setShowResources(false);
       };
 
       const addExerciseMinutes = (mins) => {
@@ -214,28 +217,60 @@
 
       const renderResult = () => {
         const renderAdvice = () => {
+          const isPoor = result.fitness === 'poor';
+          
           if (result.type === 'underweight') {
             return (
               <ul className="space-y-3 text-gray-600 mt-4 text-left mx-auto max-w-md">
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>阻力訓練最重要：</strong>每週安排 2 到 3 天，幫助肌肉生長，這是你現在的首要任務。</div></li>
+                {isPoor && (
+                  <li className="bg-amber-50 p-3 rounded-lg border border-amber-100 text-amber-800 text-sm mb-4">
+                    💡 <strong>心肺建構期：</strong>既然爬樓梯會覺得喘，代表我們需要先喚醒心肺引擎。所有運動請先從「中低強度」開始，感覺微喘能說話就好。
+                  </li>
+                )}
+                {!isPoor && (
+                  <li className="bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-800 text-sm mb-4">
+                    💡 <strong>進階成長期：</strong>爬樓梯對你來說滿輕鬆的，基礎不錯！可以放心執行各種阻力訓練，幫助肌肉更有效率地生長。
+                  </li>
+                )}
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>阻力訓練最重要：</strong>每週安排 2 到 3 天幫助肌肉生長。{isPoor ? '先從無負重的徒手深蹲或推牆開始。' : '可以開始加入彈力帶或輕重量啞鈴。'}</div></li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>適度有氧就好：</strong>每週大概 150 分鐘，維持基本心肺功能，不要做過度消耗熱量的長跑。</div></li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>運動零食與 HIIT：</strong>多利用零碎時間活動筋骨，但暫時不需要做太激烈的 HIIT 高強度間歇。</div></li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>運動零食與 HIIT：</strong>{isPoor ? '目前只要多利用零碎時間伸展活動就好，暫時不要做會讓心跳飆高的 HIIT。' : '可以適度穿插初階的 HIIT 來刺激代謝。'}</div></li>
               </ul>
             );
           } else if (result.type === 'normal') {
             return (
               <ul className="space-y-3 text-gray-600 mt-4 text-left mx-auto max-w-md">
+                {isPoor && (
+                  <li className="bg-amber-50 p-3 rounded-lg border border-amber-100 text-amber-800 text-sm mb-4">
+                    💡 <strong>心肺建構期：</strong>雖然體重標準，但爬樓梯會喘代表心肺耐力還有進步空間。請先著重在快走等平緩有氧，別急著做高強度訓練。
+                  </li>
+                )}
+                {!isPoor && (
+                  <li className="bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-800 text-sm mb-4">
+                    💡 <strong>進階維持期：</strong>體態和體力都在很好的狀態！你可以大膽嘗試各種運動組合，特別是加入高強度間歇來挑戰自己。
+                  </li>
+                )}
                 <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>有氧運動打底：</strong>每週累積 150 到 300 分鐘，快走或騎腳踏車都很棒。</div></li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>阻力訓練維持：</strong>每週 2 到 3 天，鍛鍊主要肌群，不讓肌肉流失。</div></li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>加入 HIIT 與零食：</strong>體力好時可以穿插 HIIT 挑戰自己，平時久坐記得配一點運動零食。</div></li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>加入 HIIT 與零食：</strong>{isPoor ? '先用日常「運動零食」代替 HIIT，等體力變好再來挑戰高強度。' : '體力好時可以穿插 HIIT 挑戰自己，平時久坐記得配一點運動零食。'}</div></li>
               </ul>
             );
           } else {
             return (
               <ul className="space-y-3 text-gray-600 mt-4 text-left mx-auto max-w-md">
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>有氧運動燃脂：</strong>每週累積 150 到 300 分鐘，這是消滅脂肪的穩固基礎。</div></li>
+                {isPoor && (
+                  <li className="bg-amber-50 p-3 rounded-lg border border-amber-100 text-amber-800 text-sm mb-4">
+                    💡 <strong>心肺建構期：</strong>因為目前體能較容易喘，強烈建議初期避開會讓心跳劇烈起伏的波比跳或衝刺，先用「快走」把心肺基礎養起來最安全。
+                  </li>
+                )}
+                {!isPoor && (
+                  <li className="bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-800 text-sm mb-4">
+                    💡 <strong>進階燃脂期：</strong>爬樓梯不喘代表你有足夠的體力去應付更高效率的燃脂運動。可以把 HIIT 加進你的常態菜單裡了！
+                  </li>
+                )}
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>有氧運動燃脂：</strong>每週累積 150 到 300 分鐘，這是消滅脂肪最安全的穩固基礎。</div></li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>阻力訓練加持：</strong>每週 2 到 3 天，把肌肉養起來能幫你提高基礎代謝，自動消耗更多熱量。</div></li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>HIIT 與零食特攻：</strong>每週 1 到 2 次的 HIIT 對改善代謝非常有效；每 1 到 2 小時起來動一下的運動零食更是關鍵。</div></li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="w-5 h-5 text-green-500 shrink-0 mt-0.5"/> <div><strong>HIIT 與零食特攻：</strong>{isPoor ? '初期多善用「運動零食」增加日常活動量就好。' : '每週 1 到 2 次的 HIIT 對改善代謝非常有效；加上日常的運動零食效果更好。'}</div></li>
               </ul>
             );
           }
@@ -300,11 +335,11 @@
             { id: 'r5', name: '徒手: 肩膀伏地挺身', mins: 10, desc: '3回合，每次30到60秒', howTo: '呈倒V字型(下犬式)撐地，彎曲手肘讓頭部靠近地面，再用力推起。' },
             { id: 'r6', name: '徒手: 雙臂側平舉前後轉', mins: 10, desc: '3回合，每次30到60秒', howTo: '雙手向兩側平舉，小幅度往前畫圈，再往後畫圈，感受肩膀發力。' },
             { id: 'r7', name: '徒手: 深蹲', mins: 10, desc: '3回合，每次30到60秒', howTo: '雙腳與肩同寬，屁股往後坐，背部挺直，站起時大腿與臀部發力。' },
-            { id: 'r8', name: '啞鈴: 二頭肌彎舉', mins: 10, desc: '3回合，5到15RM', howTo: '手持啞鈴垂於兩側，手肘固定在腰際，將啞鈴向上彎舉靠近肩膀。' },
-            { id: 'r9', name: '啞鈴: 三頭肌伸展', mins: 10, desc: '3回合，5到15RM', howTo: '雙手握住一個啞鈴舉過頭頂，彎曲手肘讓啞鈴下放到腦後，再用力伸直。' },
-            { id: 'r10', name: '啞鈴: 胸大肌推舉', mins: 10, desc: '3回合，5到15RM', howTo: '平躺，雙手持啞鈴在胸口兩側，將啞鈴垂直往上推舉直到手臂伸直。' },
-            { id: 'r11', name: '啞鈴: 後肩飛鳥', mins: 10, desc: '3回合，5到15RM', howTo: '身體微前傾，雙手拿啞鈴自然下垂，手肘微彎，往兩側上方提起至肩膀高度。' },
-            { id: 'r12', name: '啞鈴: 負重深蹲', mins: 10, desc: '3回合，5到15RM', howTo: '雙手拿著啞鈴或踩著彈力帶，保持背部挺直進行深蹲動作。' },
+            { id: 'r8', name: '啞鈴/彈力帶: 二頭肌彎舉', mins: 10, desc: '3回合，5到15RM', howTo: '手持啞鈴或踩穩彈力帶垂於兩側，手肘固定在腰際，向上彎舉靠近肩膀。' },
+            { id: 'r9', name: '啞鈴/彈力帶: 三頭肌伸展', mins: 10, desc: '3回合，5到15RM', howTo: '雙手握住一個啞鈴或拉緊彈力帶舉過頭頂，彎曲手肘下放到腦後，再用力伸直。' },
+            { id: 'r10', name: '啞鈴/彈力帶: 胸大肌推舉', mins: 10, desc: '3回合，5到15RM', howTo: '平躺，雙手持啞鈴(或將彈力帶繞過背部)在胸口兩側，垂直往上推舉直到手臂伸直。' },
+            { id: 'r11', name: '啞鈴/彈力帶: 後肩飛鳥', mins: 10, desc: '3回合，5到15RM', howTo: '身體微前傾，雙手拿啞鈴或踩著彈力帶兩端自然下垂，手肘微彎，往兩側上方提起至肩膀高度。' },
+            { id: 'r12', name: '啞鈴/彈力帶: 負重深蹲', mins: 10, desc: '3回合，5到15RM', howTo: '雙手拿著啞鈴或踩著彈力帶，保持背部挺直進行深蹲動作。' },
             { id: 'r13', name: '機械: 前手臂彎舉', mins: 10, desc: '3回合，5到12次', howTo: '使用健身房二頭肌訓練機，調整好重量後進行彎舉。' },
             { id: 'r14', name: '機械: 雙臂下拉', mins: 10, desc: '3回合，5到12次', howTo: '使用滑輪下拉機，挺胸收背，將握把往胸口方向拉下。' },
             { id: 'r15', name: '機械: 雙臂內收', mins: 10, desc: '3回合，5到12次', howTo: '使用夾胸機(蝴蝶機)，感受胸肌出力將手把往中間夾緊。' },
@@ -465,7 +500,7 @@
               </div>
 
               <h3 className="text-xl font-bold text-gray-800 mb-4 px-2">今天想選哪個模式？</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button onClick={() => setDashboardView('bento')} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 text-left flex flex-col h-full group">
                   <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <Utensils className="w-6 h-6 text-emerald-600" />
@@ -492,7 +527,10 @@
                   <p className="text-sm text-gray-500 flex-grow">今天超懶得動？交給命運安排，抽一支籤只要做兩分鐘就好。</p>
                   <div className="mt-4 text-rose-600 text-sm font-medium flex items-center gap-1">試試手氣 <ArrowRight className="w-4 h-4"/></div>
                 </button>
-
+              </div>
+              
+              <h3 className="text-xl font-bold text-gray-800 mt-12 mb-4 px-2">推薦資源與精選特訓</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <a 
                   href="https://lukehsiao-yc.github.io/forfatabd/" 
                   target="_blank" 
@@ -506,6 +544,55 @@
                   <p className="text-sm text-gray-500 flex-grow">想要特別強化核心？來挑戰這個專屬的腹部訓練小遊戲吧！</p>
                   <div className="mt-4 text-blue-600 text-sm font-medium flex items-center gap-1">前往挑戰 <ExternalLink className="w-4 h-4"/></div>
                 </a>
+
+                <a 
+                  href="https://youtube.com/playlist?list=PLYOvnYelJ8SWTUIfdVZFQkGGrDHx6hJbQ&si=ff-erXQrB2x7trrr" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 text-left flex flex-col h-full group cursor-pointer block"
+                >
+                  <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Youtube className="w-6 h-6 text-red-600" />
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">彈力帶運動教學</h4>
+                  <p className="text-sm text-gray-500 flex-grow">中華民國糖尿病衛教學會製作的影片，跟著做安全又有效。</p>
+                  <div className="mt-4 text-red-600 text-sm font-medium flex items-center gap-1">前往觀看 <ExternalLink className="w-4 h-4"/></div>
+                </a>
+              </div>
+              
+              {/* 實用運動指南與工具 - 摺疊按鈕設計 */}
+              <div className="mt-8 px-2">
+                <button 
+                  onClick={() => setShowResources(!showResources)}
+                  className="w-full flex items-center justify-between p-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 rounded-2xl transition-colors font-bold"
+                >
+                  <span className="flex items-center gap-2"><BookOpen className="w-5 h-5" /> 實用運動指南與工具</span>
+                  {showResources ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                </button>
+                
+                {showResources && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4 animate-in slide-in-from-top-2 duration-300">
+                    {[
+                      { title: '教育部 邁向健康體位 從健康生活型態做起', url: 'https://cpd.moe.gov.tw/articleInfo?id=36599' },
+                      { title: '國民健康署 全民身體活動指引', url: 'https://www.hpa.gov.tw/Pages/ashx/GetFile.ashx?lang=c&type=1&sid=ede2e5d9eb7841ffbab724ead43baead' },
+                      { title: '國民健康署 運動熱量計算機', url: 'https://km.hpa.gov.tw/obesity/TC/SportCalculate.aspx' },
+                      { title: '國民健康署 兒童與青少年運動建議', url: 'https://www.hpa.gov.tw/Pages/Detail.aspx?nodeid=571&pid=14174' },
+                      { title: '國民健康署 生活化運動建議', url: 'https://www.hpa.gov.tw/Pages/Detail.aspx?nodeid=571&pid=9773&sid=14182' },
+                      { title: '國民健康署 促進健康體能的方法', url: 'https://www.hpa.gov.tw/Pages/Detail.aspx?nodeid=571&pid=882&sid=14182' }
+                    ].map((link, index) => (
+                      <a 
+                        key={index}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition-all group"
+                      >
+                        <span className="text-sm font-medium text-gray-700 group-hover:text-indigo-700 transition-colors pr-2">{link.title}</span>
+                        <ExternalLink className="w-4 h-4 text-gray-300 group-hover:text-indigo-400 shrink-0" />
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
               
               <div className="text-center pt-12">
@@ -639,12 +726,13 @@
         };
 
         let bentoTip = "";
+        const isPoor = formData.fitness === 'poor';
         if (result?.type === 'underweight') {
           bentoTip = "你現在最需要優質蛋白質！蛋白主菜(阻力)一定要點滿，健康蔬果(有氧)配一點點就好，五穀雜糧(HIIT)可以先跳過。";
         } else if (result?.type === 'normal') {
-          bentoTip = "基礎不錯喔！建議健康蔬果(有氧)、蛋白主菜(阻力)、五穀雜糧(HIIT)各挑一樣，維持代謝跟肌肉彈性。";
+          bentoTip = isPoor ? "基礎不錯喔！建議先從健康蔬果(有氧)開始慢慢練心肺，配一點蛋白主菜(阻力)維持彈性。" : "基礎不錯喔！建議健康蔬果(有氧)、蛋白主菜(阻力)、五穀雜糧(HIIT)各挑一樣，維持代謝跟肌肉彈性。";
         } else {
-          bentoTip = "為了強化燃脂，我們來個均衡大全餐！健康蔬果、雙份蛋白、雙份五穀雜糧全部點好點滿。";
+          bentoTip = isPoor ? "因為目前心肺還在建構期，建議先多點一些健康蔬果(快走等溫和有氧)，暫時避開五穀雜糧(高強度間歇)。" : "為了強化燃脂，我們來個均衡大全餐！健康蔬果、雙份蛋白、雙份五穀雜糧全部點好點滿。";
         }
 
         if (dashboardView === 'bento') {
