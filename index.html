@@ -52,7 +52,7 @@
 
       const [dashboardView, setDashboardView] = useState('menu');
       const [showResources, setShowResources] = useState(false);
-      const [showFeedback, setShowFeedback] = useState(false); // 控制回饋小視窗的狀態
+      const [showFeedback, setShowFeedback] = useState(false); 
 
       const [bentoState, setBentoState] = useState({
         aerobic: '',
@@ -139,6 +139,18 @@
         newData.totalMinutes += mins;
         saveUserData(newData);
         showToast(`超棒的！成功累積 ${mins} 分鐘運動量`);
+      };
+
+      const toggleBingo = (index) => {
+        let newBoard = [...userData.bingoBoard];
+        newBoard[index] = !newBoard[index];
+        
+        let newData = { ...userData, bingoBoard: newBoard };
+        saveUserData(newData);
+        
+        if (newBoard[index]) {
+          showToast('解鎖一個日常運動零食！');
+        }
       };
 
       const renderIntro = () => (
