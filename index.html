@@ -33,7 +33,7 @@
       Target, Flame, Play, Edit3, Award, Utensils, BookOpen, 
       ArrowLeft, Ticket, LayoutGrid, CheckCircle2, RefreshCw, 
       Facebook, Instagram, MessageCircle, ExternalLink, Youtube, 
-      ChevronDown, ChevronUp, MessageSquarePlus, X, Map
+      ChevronDown, ChevronUp, MessageSquarePlus, X, Map, PlayCircle, Star
     } from 'lucide-react';
 
     function App() {
@@ -53,6 +53,10 @@
       const [dashboardView, setDashboardView] = useState('menu');
       const [showResources, setShowResources] = useState(false);
       const [showFeedback, setShowFeedback] = useState(false); 
+
+      // 影音專區的篩選狀態
+      const [videoAudience, setVideoAudience] = useState('all'); 
+      const [videoType, setVideoType] = useState('all'); 
 
       const [bentoState, setBentoState] = useState({
         aerobic: '',
@@ -374,6 +378,171 @@
           ]
         };
 
+        // 教練影音資料庫
+        const coachVideoDB = [
+          // === 青少年/成人: 有氧 ===
+          {
+            id: 'v_aero_1',
+            title: '基礎踏步心肺有氧',
+            desc: '低衝擊、無跳躍，是控制體重最安全的入門處方。',
+            provider: '照護線上',
+            target: 'adult',
+            type: 'aerobic',
+            url: 'https://www.youtube.com/watch?v=YO8XT3qqiBw'
+          },
+          {
+            id: 'v_aero_2',
+            title: '18分鐘心肺有氧運動 (無跳躍)',
+            desc: '在家動一動，無跳躍、無深蹲，不用擔心膝蓋痛不敢做。',
+            provider: '照護線上',
+            target: 'adult',
+            type: 'aerobic',
+            url: 'https://www.youtube.com/watch?v=2bbVbdxHhgg&list=PLiT_ZsaEqKklAqN-NozZ7zgQF6aU-IDQm'
+          },
+          {
+            id: 'v_aero_3',
+            title: '徒手循環式全身訓練｜初階',
+            desc: '初階的徒手循環式全身訓練，居家也能簡單練心肺。',
+            provider: '高雄市運動發展局',
+            target: 'adult',
+            type: 'aerobic',
+            url: 'https://www.youtube.com/watch?v=aBCl2kv8IXY'
+          },
+          // === 青少年/成人: 肌力 ===
+          {
+            id: 'v_str_1',
+            title: '彈力帶運動教學',
+            desc: '跟著做安全又有效，非常適合居家訓練。',
+            provider: '中華民國糖尿病衛教學會',
+            target: 'adult',
+            type: 'strength',
+            url: 'https://youtube.com/playlist?list=PLYOvnYelJ8SWTUIfdVZFQkGGrDHx6hJbQ&si=ff-erXQrB2x7trrr'
+          },
+          {
+            id: 'v_str_2',
+            title: '全站姿腹部核心訓練',
+            desc: '站著練腹部核心，可以同時改善支撐、平衡。',
+            provider: '照護線上',
+            target: 'adult',
+            type: 'strength',
+            url: 'https://www.youtube.com/watch?v=st6cWQ8ZnbE&list=PLiT_ZsaEqKklyb6jaW1p0vFHn8onNmr9O&index=2'
+          },
+          {
+            id: 'v_str_3',
+            title: '10分鐘全身性肌力訓練',
+            desc: '12個徒手動作全身練透透，在家也能增肌。',
+            provider: '高雄市運動發展局',
+            target: 'adult',
+            type: 'strength',
+            url: 'https://www.youtube.com/watch?v=u8dmY0K4rqo&t=93s'
+          },
+          {
+            id: 'v_str_4',
+            title: '綜合性全身訓練',
+            desc: '全身循環的綜合體適能訓練。',
+            provider: '高雄市運動發展局',
+            target: 'adult',
+            type: 'strength',
+            url: 'https://www.youtube.com/watch?v=DWZWwpzRb6c'
+          },
+          {
+            id: 'v_str_5',
+            title: '坐著練上背與肩膀',
+            desc: '坐著也能練系列，不用因為腳不舒服就終止運動喔！',
+            provider: '照護線上',
+            target: 'adult',
+            type: 'strength',
+            url: 'https://www.youtube.com/watch?v=cUDUxlsXyYQ&list=PLiT_ZsaEqKkkJXYdPF4gZLIJUZxiGmO84&index=3'
+          },
+          // === 青少年/成人: HIIT ===
+          {
+            id: 'v_hiit_1',
+            title: '居家體適能 (徒手爆汗全身訓練)',
+            desc: '強度較高，適合大孩子與家長一起互相督促練習。',
+            provider: '高雄市運動發展局',
+            target: 'adult',
+            type: 'hiit',
+            url: 'https://www.youtube.com/watch?v=6KizlGHSqJY'
+          },
+          {
+            id: 'v_hiit_2',
+            title: '四分鐘TABATA間歇訓練',
+            desc: '入門級的TABATA練習，適合零碎時間動一動。',
+            provider: '照護線上',
+            target: 'adult',
+            type: 'hiit',
+            url: 'https://www.youtube.com/watch?v=NphFrQifJss&list=PLiT_ZsaEqKkm6zjG9Iiq2J__forp2iC6r&index=2'
+          },
+
+          // === 幼兒/兒童: 有氧 ===
+          {
+            id: 'c_aero_1',
+            title: '親子音樂律動 (動物園主題)',
+            desc: '結合故事與節奏，適合放學後輕鬆放電。',
+            provider: '高雄市運動發展局',
+            target: 'child',
+            type: 'aerobic',
+            energyLevel: 3,
+            interactionLevel: 5,
+            url: 'https://www.youtube.com/watch?v=VjvWffoGCc4'
+          },
+          // === 幼兒/兒童: 肌力 ===
+          {
+            id: 'c_str_1',
+            title: '兒童體適能訓練 (大肌肉開發)',
+            desc: '適合週末全家一起在家進行的大肌肉開發訓練。',
+            provider: '高雄市運動發展局',
+            target: 'child',
+            type: 'strength',
+            energyLevel: 5,
+            interactionLevel: 4,
+            url: 'https://www.youtube.com/watch?v=iZ1knnM7r4M'
+          },
+          {
+            id: 'c_str_2',
+            title: '兒童體能訓練 EP2 (運動潛能激發)',
+            desc: '著重在靈敏度與協調性，激發孩子天生的運動能力。',
+            provider: '高雄市運動發展局',
+            target: 'child',
+            type: 'strength',
+            energyLevel: 4,
+            interactionLevel: 4,
+            url: 'https://www.youtube.com/watch?v=kC_neHooV_c'
+          },
+          {
+            id: 'c_str_3',
+            title: '兒童大肌肉訓練',
+            desc: '訓練小朋友的大肌肉發展，家長也可以一起動起來！',
+            provider: '高雄市運動發展局',
+            target: 'child',
+            type: 'strength',
+            energyLevel: 4,
+            interactionLevel: 4,
+            url: 'https://www.youtube.com/watch?v=ACiTv3bfGbQ'
+          }
+        ];
+
+        // 影音篩選邏輯
+        const filteredVideos = coachVideoDB.filter(video => {
+          const matchAudience = videoAudience === 'all' || video.target === videoAudience;
+          const matchType = videoType === 'all' || video.type === videoType;
+          return matchAudience && matchType;
+        });
+
+        // 繪製星星評價小幫手
+        const renderStars = (level, label) => {
+          return (
+            <div className="flex items-center gap-1 mt-1">
+              <span className="text-xs text-gray-500 w-16">{label}</span>
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className={`w-3.5 h-3.5 ${i < level ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200'}`} />
+                ))}
+              </div>
+            </div>
+          );
+        };
+
         const handleContractSave = (e) => {
           e.preventDefault();
           const finalTrigger = contractForm.trigger === 'custom' ? contractForm.customTrigger : contractForm.trigger;
@@ -541,9 +710,9 @@
                   <div className="mt-4 text-rose-600 text-sm font-medium flex items-center gap-1">試試手氣 <ArrowRight className="w-4 h-4"/></div>
                 </button>
               </div>
-              
-              <h3 className="text-xl font-bold text-gray-800 mt-12 mb-4 px-2">推薦資源與精選特訓</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+              <h3 className="text-xl font-bold text-gray-800 mt-12 mb-4 px-2">專屬互動特訓</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <a 
                   href="https://lukehsiao-yc.github.io/for_healthy_children/" 
                   target="_blank" 
@@ -572,19 +741,17 @@
                   <div className="mt-4 text-blue-600 text-sm font-medium flex items-center gap-1">前往挑戰 <ExternalLink className="w-4 h-4"/></div>
                 </a>
 
-                <a 
-                  href="https://youtube.com/playlist?list=PLYOvnYelJ8SWTUIfdVZFQkGGrDHx6hJbQ&si=ff-erXQrB2x7trrr" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <button 
+                  onClick={() => setDashboardView('videos')}
                   className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 text-left flex flex-col h-full group cursor-pointer block"
                 >
                   <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                    <Youtube className="w-6 h-6 text-red-600" />
+                    <PlayCircle className="w-6 h-6 text-red-600" />
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">彈力帶運動教學</h4>
-                  <p className="text-sm text-gray-500 flex-grow">中華民國糖尿病衛教學會製作的影片，跟著做安全又有效。</p>
-                  <div className="mt-4 text-red-600 text-sm font-medium flex items-center gap-1">前往觀看 <ExternalLink className="w-4 h-4"/></div>
-                </a>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">教練影音專區</h4>
+                  <p className="text-sm text-gray-500 flex-grow">跟著精選教學影片一起安全動起來。可依對象與類型自由篩選！</p>
+                  <div className="mt-4 text-red-600 text-sm font-medium flex items-center gap-1">進入專區 <ArrowRight className="w-4 h-4"/></div>
+                </button>
               </div>
               
               <div className="mt-8 px-2">
@@ -708,6 +875,87 @@
                     太棒了！今天已經收集了 {userData.bingoBoard.filter(Boolean).length} 個運動零食 🌟
                   </p>
                 )}
+              </div>
+            </div>
+          );
+        }
+
+        if (dashboardView === 'videos') {
+          return (
+            <div className="max-w-4xl mx-auto animate-in slide-in-from-right duration-300 pb-12">
+              {renderTopStats()}
+              <button onClick={() => setDashboardView('menu')} className="mb-6 text-gray-500 hover:text-gray-800 flex items-center gap-2 text-sm">
+                <ArrowLeft className="w-4 h-4" /> 返回選單
+              </button>
+
+              <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                  <PlayCircle className="w-7 h-7 text-red-500" />
+                  教練影音專區
+                </h3>
+                
+                <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 mb-8">
+                  <div className="flex flex-col sm:flex-row gap-5">
+                    <div className="flex-1">
+                      <label className="text-xs font-bold text-gray-500 mb-2 block">適合對象</label>
+                      <div className="flex flex-wrap gap-2">
+                        <button onClick={() => setVideoAudience('all')} className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${videoAudience === 'all' ? 'bg-red-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'}`}>全部</button>
+                        <button onClick={() => setVideoAudience('adult')} className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${videoAudience === 'adult' ? 'bg-red-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'}`}>青少年/成年</button>
+                        <button onClick={() => setVideoAudience('child')} className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${videoAudience === 'child' ? 'bg-red-500 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'}`}>幼兒/兒童</button>
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <label className="text-xs font-bold text-gray-500 mb-2 block">運動類型</label>
+                      <div className="flex flex-wrap gap-2">
+                        <button onClick={() => setVideoType('all')} className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${videoType === 'all' ? 'bg-gray-800 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'}`}>全部</button>
+                        <button onClick={() => setVideoType('aerobic')} className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${videoType === 'aerobic' ? 'bg-gray-800 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'}`}>有氧</button>
+                        <button onClick={() => setVideoType('strength')} className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${videoType === 'strength' ? 'bg-gray-800 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'}`}>肌力</button>
+                        <button onClick={() => setVideoType('hiit')} className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${videoType === 'hiit' ? 'bg-gray-800 text-white shadow-sm' : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-100'}`}>HIIT</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {filteredVideos.length > 0 ? (
+                    filteredVideos.map(video => (
+                      <div key={video.id} className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex flex-col h-full group hover:shadow-md hover:border-red-200 transition-all">
+                        <div className="flex items-start justify-between mb-3">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-red-50 text-red-700 border border-red-100">
+                            <Youtube className="w-3.5 h-3.5" /> {video.provider}
+                          </span>
+                          <span className="text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-lg font-medium">
+                            {video.type === 'aerobic' ? '有氧' : video.type === 'strength' ? '肌力' : 'HIIT'}
+                          </span>
+                        </div>
+                        
+                        <h4 className="text-lg font-bold text-gray-900 mb-2 leading-snug">{video.title}</h4>
+                        <p className="text-sm text-gray-600 mb-5 flex-grow leading-relaxed">{video.desc}</p>
+                        
+                        {video.target === 'child' && (
+                          <div className="mb-5 p-3.5 bg-amber-50/50 rounded-xl border border-amber-100/50">
+                            {renderStars(video.energyLevel, '放電等級')}
+                            {renderStars(video.interactionLevel, '親子互動')}
+                          </div>
+                        )}
+                        
+                        <a 
+                          href={video.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="mt-auto w-full py-3 bg-gray-50 text-gray-700 hover:bg-red-500 hover:text-white border border-gray-200 hover:border-transparent rounded-xl text-sm font-bold flex items-center justify-center gap-2 transition-colors"
+                        >
+                          前往觀看影片 <ExternalLink className="w-4 h-4" />
+                        </a>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-span-full py-16 text-center text-gray-500 bg-gray-50 rounded-2xl border-2 border-gray-200 border-dashed">
+                      <PlayCircle className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+                      目前這個分類還沒有影片喔，試著換個條件吧！
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           );
