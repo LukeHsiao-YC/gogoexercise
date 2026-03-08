@@ -158,19 +158,29 @@
       };
 
       const renderIntro = () => (
-        <div className="flex flex-col items-center justify-center text-center space-y-6 animate-in fade-in duration-500">
-          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-            <Activity className="w-10 h-10 text-blue-600" />
+        <div className="flex flex-col items-center justify-center text-center space-y-6 animate-in fade-in duration-500 mt-6">
+          <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-2 animate-bounce shadow-sm border-4 border-white">
+            <Activity className="w-12 h-12 text-blue-500" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-800">找到你的專屬運動處方</h1>
-          <p className="text-gray-600 max-w-md leading-relaxed">
+          
+          <div className="space-y-3">
+            <h2 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-emerald-500 tracking-widest italic uppercase">
+              GO!GO! EXERCISE
+            </h2>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+              找到你的專屬運動處方
+            </h1>
+          </div>
+          
+          <p className="text-gray-600 max-w-md leading-relaxed text-lg mt-4">
             其實我們都知道要運動，但就是很難開始。花個一分鐘回答幾個問題，我們幫你準備了一套不會太累又有成就感的日常訓練計畫。
           </p>
+          
           <button 
             onClick={() => setStep('assessment')}
-            className="mt-8 px-8 py-3 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors flex items-center gap-2"
+            className="mt-10 px-10 py-4 bg-blue-600 text-white rounded-full font-bold text-lg hover:bg-blue-700 hover:shadow-lg transition-all flex items-center gap-2 hover:-translate-y-1"
           >
-            馬上開始 <ArrowRight className="w-4 h-4" />
+            馬上開始 <ArrowRight className="w-5 h-5" />
           </button>
         </div>
       );
@@ -790,91 +800,6 @@
               
               <div className="text-center pt-12">
                 <button onClick={() => setStep('intro')} className="text-gray-400 hover:text-gray-600 transition-colors text-sm">重新檢測身體狀態</button>
-              </div>
-            </div>
-          );
-        }
-
-        if (dashboardView === 'lucky') {
-          return (
-            <div className="max-w-2xl mx-auto animate-in slide-in-from-right duration-300 pb-12">
-              {renderTopStats()}
-              <button onClick={() => setDashboardView('menu')} className="mb-6 text-gray-500 hover:text-gray-800 flex items-center gap-2 text-sm">
-                <ArrowLeft className="w-4 h-4" /> 返回選單
-              </button>
-
-              <div className="bg-gradient-to-br from-rose-500 to-orange-500 p-8 rounded-3xl shadow-lg text-white text-center relative overflow-hidden">
-                <h3 className="text-2xl font-bold mb-2">抽一個幸運動作</h3>
-                <p className="text-rose-100 mb-8">只要動兩分鐘，就能騙大腦進入狀況！</p>
-                
-                <div className={`w-48 h-48 mx-auto bg-white/10 border-4 border-white/30 rounded-2xl flex items-center justify-center p-6 mb-8 ${isDrawing ? 'animate-bounce' : ''}`}>
-                  <span className={`text-2xl font-bold ${isDrawing ? 'blur-sm' : 'blur-none'} transition-all text-white drop-shadow-md`}>
-                    {currentQuick}
-                  </span>
-                </div>
-
-                {!hasDrawn ? (
-                  <button 
-                    onClick={startLuckyDraw}
-                    disabled={isDrawing}
-                    className="bg-white text-rose-600 px-8 py-4 rounded-full font-bold hover:bg-rose-50 transition-all shadow-md text-lg disabled:opacity-50"
-                  >
-                    {isDrawing ? '搖籤中...' : '搖一搖籤筒'}
-                  </button>
-                ) : (
-                  <div className="space-y-4 animate-in fade-in zoom-in">
-                    <button 
-                      onClick={finishLuckyDraw}
-                      className="bg-green-500 text-white px-8 py-4 rounded-full font-bold hover:bg-green-600 transition-all shadow-md flex items-center justify-center gap-2 w-full"
-                    >
-                      <CheckCircle2 className="w-6 h-6" /> 做完了，幫我紀錄 2 分鐘！
-                    </button>
-                    <button 
-                      onClick={startLuckyDraw}
-                      className="text-white/80 hover:text-white underline text-sm"
-                    >
-                      這個太難了，我想重抽一支
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          );
-        }
-
-        if (dashboardView === 'bingo') {
-          return (
-            <div className="max-w-2xl mx-auto animate-in slide-in-from-right duration-300 pb-12">
-              {renderTopStats()}
-              <button onClick={() => setDashboardView('menu')} className="mb-6 text-gray-500 hover:text-gray-800 flex items-center gap-2 text-sm">
-                <ArrowLeft className="w-4 h-4" /> 返回選單
-              </button>
-
-              <div className="bg-white p-6 md:p-8 rounded-3xl border border-gray-100 shadow-sm">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center">九宮格運動零食</h3>
-                <p className="text-gray-500 text-sm mb-8 text-center">把生活碎片當作闖關遊戲，點擊完成任務！</p>
-                
-                <div className="grid grid-cols-3 gap-2 sm:gap-4 max-w-sm mx-auto">
-                  {bingoItems.map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => toggleBingo(index)}
-                      className={`aspect-square p-2 sm:p-4 rounded-2xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center text-center leading-snug ${
-                        userData.bingoBoard[index]
-                          ? 'bg-purple-500 text-white scale-95 shadow-inner'
-                          : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100'
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-                
-                {userData.bingoBoard.filter(Boolean).length > 0 && (
-                  <p className="text-center mt-6 text-purple-600 font-medium animate-in fade-in">
-                    太棒了！今天已經收集了 {userData.bingoBoard.filter(Boolean).length} 個運動零食 🌟
-                  </p>
-                )}
               </div>
             </div>
           );
