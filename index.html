@@ -33,7 +33,7 @@
       Target, Flame, Play, Edit3, Award, Utensils, BookOpen, 
       ArrowLeft, Ticket, LayoutGrid, CheckCircle2, RefreshCw, 
       Facebook, Instagram, MessageCircle, ExternalLink, Youtube, 
-      ChevronDown, ChevronUp, MessageSquarePlus, X, Map, PlayCircle, Star, Baby, User, CalendarPlus, Copy
+      ChevronDown, ChevronUp, MessageSquarePlus, Map, PlayCircle, Star, Baby, User, CalendarPlus, Copy
     } from 'lucide-react';
 
     // 集中管理靜態資料庫
@@ -132,7 +132,6 @@
 
       const [dashboardView, setDashboardView] = useState('menu');
       const [showResources, setShowResources] = useState(false);
-      const [showFeedback, setShowFeedback] = useState(false); 
 
       const [videoAudience, setVideoAudience] = useState('all'); 
       const [videoType, setVideoType] = useState('all'); 
@@ -1184,53 +1183,41 @@
             {step === 'dashboard' && renderDashboard()}
           </main>
 
-          <footer className="text-center py-8 text-gray-500 text-sm mt-auto border-t border-gray-200">
-            <p className="font-medium text-gray-600 mb-2">蕭宇超醫師製作 一起告別雲朵身材</p>
-            
-            <div className="flex items-center justify-center gap-5 mb-4">
-              <a href="https://www.facebook.com/share/1FoPpvVSZs/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 transition-colors" title="Facebook 粉絲專頁">
-                <Facebook className="w-5 h-5" />
-              </a>
-              <a href="https://www.instagram.com/goodbyecloudkids_drhsiao?igsh=cWhkZXhwcjNoZnpm&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-600 transition-colors" title="Instagram">
-                <Instagram className="w-5 h-5" />
-              </a>
-              <a href="https://lin.ee/fAzcScx" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-500 transition-colors flex items-center gap-1" title="Line 官方帳號">
-                <MessageCircle className="w-5 h-5" />
-                <span className="font-medium">LINE</span>
+          <footer className="text-center py-10 text-gray-500 text-sm mt-auto border-t border-gray-200 bg-white">
+            {/* 固定式意見回饋區塊 */}
+            <div className="max-w-md mx-auto bg-gray-50 p-6 rounded-2xl border border-gray-100 shadow-sm mb-10 text-left">
+              <div className="flex items-center gap-2 mb-2">
+                <MessageSquarePlus className="w-6 h-6 text-blue-500" />
+                <h4 className="font-bold text-gray-800 text-base">有什麼建議嗎？</h4>
+              </div>
+              <p className="text-sm text-gray-500 mb-5 leading-relaxed">發現錯誤、想許願新功能，或是單純想分享使用心得，都歡迎跟我說！</p>
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQCwqwNpqwfNVca6ToQMZzgSJ7Y98-RDHzsGDLmnvktV81Iw/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" className="block w-full text-center py-3 bg-blue-100 text-blue-700 rounded-xl text-sm font-bold hover:bg-blue-200 transition-colors shadow-sm">
+                📝 填寫回饋表單
               </a>
             </div>
 
-            <p className="text-xs">
+            <p className="font-medium text-gray-600 mb-3 text-base">蕭宇超醫師製作 一起告別雲朵身材</p>
+            
+            <div className="flex items-center justify-center gap-6 mb-5">
+              <a href="https://www.facebook.com/share/1FoPpvVSZs/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-blue-600 transition-colors" title="Facebook 粉絲專頁">
+                <Facebook className="w-6 h-6" />
+              </a>
+              <a href="https://www.instagram.com/goodbyecloudkids_drhsiao?igsh=cWhkZXhwcjNoZnpm&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-pink-600 transition-colors" title="Instagram">
+                <Instagram className="w-6 h-6" />
+              </a>
+              <a href="https://lin.ee/fAzcScx" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-green-500 transition-colors flex items-center gap-1.5" title="Line 官方帳號">
+                <MessageCircle className="w-6 h-6" />
+                <span className="font-medium text-base">LINE</span>
+              </a>
+            </div>
+
+            <p className="text-xs text-gray-400">
               資料參考來源：
-              <a href="https://cpd.moe.gov.tw/articleInfo?id=36599" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 underline transition-colors ml-1">
+              <a href="https://cpd.moe.gov.tw/articleInfo?id=36599" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 underline transition-colors ml-1">
                 教育部 邁向健康體位 從健康生活型態做起
               </a>
             </p>
           </footer>
-
-          {/* 浮動意見回饋按鈕 */}
-          <div className="fixed bottom-6 right-6 z-50">
-            {showFeedback && (
-              <div className="absolute bottom-16 right-0 mb-4 w-72 bg-white rounded-2xl shadow-xl border border-gray-100 p-5 animate-in slide-in-from-bottom-2">
-                <div className="flex justify-between items-center mb-2">
-                  <h4 className="font-bold text-gray-800">有什麼建議嗎？</h4>
-                  <button onClick={() => setShowFeedback(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-                <p className="text-sm text-gray-500 mb-5 leading-relaxed">發現錯誤、想許願新功能，或是單純想分享使用心得，都歡迎跟我說！</p>
-                <div>
-                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfQCwqwNpqwfNVca6ToQMZzgSJ7Y98-RDHzsGDLmnvktV81Iw/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" className="block w-full text-center py-3 bg-blue-50 text-blue-700 rounded-xl text-sm font-bold hover:bg-blue-100 transition-colors">
-                    📝 填寫回饋表單
-                  </a>
-                </div>
-              </div>
-            )}
-            <button onClick={() => setShowFeedback(!showFeedback)} className="bg-blue-600 text-white py-3 px-5 rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-105 flex items-center justify-center gap-2 group" title="意見回饋">
-              <MessageSquarePlus className="w-5 h-5" />
-              <span className="font-medium tracking-wide">意見回饋</span>
-            </button>
-          </div>
         </div>
       );
     }
